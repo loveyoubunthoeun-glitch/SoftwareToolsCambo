@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="km">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Tools Cambo - Premium Software</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Koulen&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+         :root {
+            --bg-color: #0a0a0a;
+            --text-primary: #e5e5e5;
+            --text-secondary: #a3a3a3;
+            --card-bg: rgba(24, 24, 24, 0.8);
+            --border-color: #2a2a2a;
+            --header-bg: rgba(0, 0, 0, 0.8);
+            --body-bg-opacity: 0.1;
+            --link-hover: #60a5fa;
+            --yellow-accent: #facc15;
+            --chat-bot-msg-bg: #2a2a2a;
+            --chat-header-bg: #2a2a2a;
+        }
+        
+        body.light-mode {
+            --bg-color: #f7f7f7;
+            --text-primary: #171717;
+            --text-secondary: #525252;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --border-color: #e5e5e5;
+            --header-bg: rgba(255, 255, 255, 0.8);
+            --body-bg-opacity: 0.05;
+            --link-hover: #3b82f6;
+            --yellow-accent: #eab308;
+            --chat-bot-msg-bg: #e5e5e5;
+            --chat-header-bg: #f0f0f0;
+        }
+        /* Universal transition for smooth theme changes */
+        
+        *,
+        *::before,
+        *::after {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            position: relative;
+            z-index: 1;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://storage.googleapis.com/gemini-prod-us-west1-423528859/1a13c791-7611-4542-a6f3-3e95071abf3f.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            opacity: var(--body-bg-opacity);
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .font-koulen {
+            font-family: 'Koulen', cursive;
+        }
+        
+        .hero-bg {
+            background-color: transparent;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 0 15px rgba(37, 99, 235, 0.3);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #1e40af 0%, #3b82f6 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .social-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: scale(1.2);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Theme-aware header */
+        
+        header {
+            background-color: var(--header-bg) !important;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .nav-link {
+            color: var(--text-secondary);
+        }
+        
+        .nav-link:hover {
+            color: var(--link-hover);
+        }
+        /* Themed text colors */
+        
+        .text-secondary {
+            color: var(--text-secondary);
+        }
+        
+        .text-yellow-accent {
+            color: var(--yellow-accent);
+        }
+        /* Cart Modal Styles */
+        
+        #cart-modal.hidden {
+            display: none;
+        }
+        
+        #cart-panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transform: scale(0.95);
+            opacity: 0;
+            transition: transform 0.2s ease-out, opacity 0.2s ease-out, background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        #cart-modal:not(.hidden) #cart-panel {
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        .cart-item-border {
+            border-color: var(--border-color);
+        }
+        
+        #cart-footer {
+            border-color: var(--border-color);
+        }
+        /* Chatbot Styles */
+        
+        #chat-bubble {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(90deg, #1e40af 0%, #3b82f6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        
+        #chat-bubble:hover {
+            transform: scale(1.1);
+        }
+        
+        #chat-window {
+            position: fixed;
+            bottom: 6rem;
+            right: 2rem;
+            width: 350px;
+            max-width: 90vw;
+            height: 500px;
+            max-height: 70vh;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            transform-origin: bottom right;
+            transform: scale(0);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        #chat-window.open {
+            transform: scale(1);
+        }
+        
+        .chat-header {
+            background-color: var(--chat-header-bg);
+            padding: 1rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-messages {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+        
+        .message {
+            margin-bottom: 0.75rem;
+            max-width: 80%;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.75rem;
+            line-height: 1.4;
+        }
+        
+        .message.bot {
+            background-color: var(--chat-bot-msg-bg);
+            color: var(--text-primary);
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+        
+        .message.user {
+            background-color: #3b82f6;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+            margin-left: auto;
+        }
+        
+        .chat-options {
+            padding: 0.5rem 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .option-btn {
+            background-color: transparent;
+            border: 1px solid #3b82f6;
+            color: #3b82f6;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            margin: 0.25rem;
+            transition: all 0.2s ease;
+        }
+        
+        .option-btn:hover {
+            background-color: #3b82f6;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="backdrop-blur-sm sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <img src="logo page.jpg" alt="Logo" class="h-12 w-12 rounded-full border-2 border-blue-500">
+                <span class="text-xl md:text-2xl font-bold font-koulen">Software Tools Cambo</span>
+            </div>
+            <div class="flex items-center">
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#home" class="nav-link transition">Home</a>
+                    <a href="#services" class="nav-link transition">Services</a>
+                    <a href="#payment" class="nav-link transition">Payment</a>
+                    <a href="#contact" class="nav-link transition">Contact</a>
+                </nav>
+                <button id="theme-toggle" class="ml-4 md:ml-6 hover:text-yellow-400 transition">
+                    <i class="fas fa-sun text-2xl"></i>
+                </button>
+                <button id="cart-button" class="ml-4 md:ml-6 relative hover:text-blue-400 transition">
+                    <i class="fas fa-shopping-cart text-2xl"></i>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                <button id="mobile-menu-button" class="md:hidden ml-4">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#home" class="nav-link block py-2">Home</a>
+            <a href="#services" class="nav-link block py-2">Services</a>
+            <a href="#payment" class="nav-link block py-2">Payment</a>
+            <a href="#contact" class="nav-link block py-2">Contact</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main id="home" class="hero-bg">
+        <section class="container mx-auto px-6 py-20 md:py-32 text-center">
+            <div class="bg-black/30 backdrop-blur-sm rounded-lg py-8">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-white font-koulen tracking-wide leading-tight">
+                    <span class="text-blue-400">Promotion ពិសេស</span> Software Tools
+                </h1>
+                <p class="mt-6 text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+                    ChatGPT | Gemini | Canva | CapCut | YouTube
+                </p>
+                <p class="mt-4 text-xl md:text-2xl font-semibold text-yellow-accent">
+                    តម្លៃពិសេស មានការបញ្ចុះតម្លៃទាំងអស់
+                </p>
+                <p class="mt-2 text-md text-secondary">
+                    ចុច Shop Now ទទួលបានភ្លាមៗ!
+                </p>
+
+                <!-- Promotion Code Section -->
+                <div class="mt-8 max-w-md mx-auto">
+                    <p class="text-lg text-green-400 font-semibold mb-2">Use Promo Code for 20% OFF!</p>
+                    <div class="flex items-center justify-center bg-gray-800/50 rounded-full p-1 sm:p-2">
+                        <input type="text" id="promo-code" placeholder="Enter promo code" class="bg-transparent text-white placeholder-gray-400 text-center w-full focus:outline-none">
+                        <button id="apply-promo" class="bg-green-500 text-white font-bold py-2 px-4 sm:px-6 rounded-full hover:bg-green-600 transition text-sm sm:text-base">Apply</button>
+                    </div>
+                    <p id="promo-message" class="mt-2 h-6 text-green-400 transition-opacity duration-300"></p>
+                </div>
+
+                <div class="mt-10">
+                    <a href="#services" class="btn-primary text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg">
+                        Shop Now <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold font-koulen">Our Premium Software</h2>
+                <p class="text-secondary mt-2">Get access to the best tools on the market.</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- ChatGPT -->
+                <div class="card rounded-lg p-6 text-center flex flex-col">
+                    <img src="chat gpt plus.jpeg" class="mx-auto rounded-full mb-4" alt="ChatGPT">
+                    <h3 class="text-xl font-semibold">ChatGPT Plus</h3>
+                    <div class="text-secondary mt-2 flex-grow space-y-4 py-4">
+                        <div class="border-b pb-3" style="border-color: var(--border-color);">
+                            <p>Private Account - <span class="font-bold text-blue-400">$10/month</span></p>
+                            <button data-product="ChatGPT - Private (1mo)" data-price="10" class="add-to-cart-btn mt-2 text-sm btn-primary text-white font-semibold py-1 px-3 rounded-md">Add to Cart</button>
+                        </div>
+                        <div class="border-b pb-3" style="border-color: var(--border-color);">
+                            <p>Shared Team - <span class="font-bold text-blue-400">$6/month</span></p>
+                            <button data-product="ChatGPT - Shared (1mo)" data-price="6" class="add-to-cart-btn mt-2 text-sm btn-primary text-white font-semibold py-1 px-3 rounded-md">Add to Cart</button>
+                        </div>
+                        <div>
+                            <p>personal accounts - <span class="font-bold text-blue-400">$20/3 months</span></p>
+                            <button data-product="ChatGPT - personal accounts (3mo)" data-price="20" class="add-to-cart-btn mt-2 text-sm btn-primary text-white font-semibold py-1 px-3 rounded-md">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Gemini -->
+                <div class="card rounded-lg p-6 text-center flex flex-col">
+                    <img src="A3.JPG.jpg" class="mx-auto rounded-full mb-4" alt="Gemini">
+                    <h3 class="text-xl font-semibold">Gemini</h3>
+                    <div class="text-secondary mt-2 flex-grow space-y-4 py-4">
+                        <div class="border-b pb-3" style="border-color: var(--border-color);">
+                            <p>Gemini Pro - <span class="font-bold text-blue-400">$14/year</span></p>
+                            <button data-product="Gemini Pro (1yr)" data-price="14" class="add-to-cart-btn mt-2 text-sm btn-primary text-white font-semibold py-1 px-3 rounded-md">Add to Cart</button>
+                        </div>
+                        <div>
+                            <p>Gemini Ultra - <span class="font-bold text-blue-400">$18/month</span></p>
+                            <button data-product="Gemini Ultra (1mo)" data-price="18" class="add-to-cart-btn mt-2 text-sm btn-primary text-white font-semibold py-1 px-3 rounded-md">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Canva -->
+                <div class="card rounded-lg p-6 text-center flex flex-col">
+                    <img src="A4.JPG.avif" class="mx-auto rounded-full mb-4" alt="Canva">
+                    <h3 class="text-xl font-semibold">Canva Pro</h3>
+                    <p class="text-secondary mt-2 flex-grow">Professional Design Tool</p>
+                    <p class="text-lg font-bold text-blue-400 my-2">$5 <span class="text-sm font-normal text-secondary">(Lifetime)</span></p>
+                    <button data-product="Canva Pro (Lifetime)" data-price="5" class="add-to-cart-btn mt-4 inline-block btn-primary text-white font-semibold py-2 px-6 rounded-lg">Add to Cart</button>
+                </div>
+                <!-- CapCut -->
+                <div class="card rounded-lg p-6 text-center flex flex-col">
+                    <img src="A2.JPG.jpg" class="mx-auto rounded-full mb-4" alt="CapCut">
+                    <h3 class="text-xl font-semibold">CapCut Pro</h3>
+                    <p class="text-secondary mt-2 flex-grow">Easy Video Editing</p>
+                    <p class="text-lg font-bold text-blue-400 my-2">$5 <span class="text-sm font-normal text-secondary">(1 Month)</span></p>
+                    <button data-product="CapCut Pro (1mo)" data-price="5" class="add-to-cart-btn mt-4 inline-block btn-primary text-white font-semibold py-2 px-6 rounded-lg">Add to Cart</button>
+                </div>
+                <!-- YouTube -->
+                <div class="card rounded-lg p-6 text-center flex flex-col">
+                    <img src="A1.JPG.avif" class="mx-auto rounded-full mb-4" alt="YouTube Premium">
+                    <h3 class="text-xl font-semibold">YouTube Premium family 5 member </h3>
+                    <p class="text-secondary mt-2 flex-grow">Ad-free & Offline</p>
+                    <p class="text-lg font-bold text-blue-400 my-2">$5 <span class="text-sm font-normal text-secondary">(1 Month)</span></p>
+                    <button data-product="YouTube Premium family 5 member (1mo)" data-price="5" class="add-to-cart-btn mt-4 inline-block btn-primary text-white font-semibold py-2 px-6 rounded-lg">Add to Cart</button>
+                </div>
+                <!-- Netflix -->
+                <div class="card rounded-lg p-6 text-center flex flex-col">
+                    <img src="netflex pro.jpeg" class="mx-auto rounded-full mb-4" alt="Netflix Premium">
+                    <h3 class="text-xl font-semibold">Netflix Premium</h3>
+                    <p class="text-secondary mt-2 flex-grow">Ultra HD 4K Streaming</p>
+                    <p class="text-lg font-bold text-blue-400 my-2">$5 <span class="text-sm font-normal text-secondary">(1 Month)</span></p>
+                    <button data-product="Netflix Premium (1mo)" data-price="5" class="add-to-cart-btn mt-4 inline-block btn-primary text-white font-semibold py-2 px-6 rounded-lg">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Section -->
+    <section id="payment" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold font-koulen">Payment Methods</h2>
+                <p class="text-secondary mt-2">Scan to pay using your preferred app.</p>
+            </div>
+            <div class="flex flex-col md:flex-row flex-wrap justify-center items-center gap-12">
+                <!-- ABA QR -->
+                <div class="card rounded-lg p-8 text-center w-full max-w-xs">
+                    <h3 class="text-2xl font-semibold mb-4">ABA PAY</h3>
+                    <img src="QR ABA.jpg" alt="ABA PAY QR Code" class="mx-auto rounded-lg">
+                    <p class="text-secondary mt-4">Name: LY SONGENG</p>
+                </div>
+                <!-- USDT QR -->
+                <div class="card rounded-lg p-8 text-center w-full max-w-xs">
+                    <h3 class="text-2xl font-semibold mb-4">Binance (USDT)</h3>
+                    <img src="QR USDT.jpg" alt="Binance USDT QR Code" class="mx-auto rounded-lg">
+                    <p class="text-secondary mt-4">Name: OnlyMeExchange</p>
+                </div>
+                <!-- KHQR -->
+                <div class="card rounded-lg p-8 text-center w-full max-w-xs">
+                    <h3 class="text-2xl font-semibold mb-4">KHQR</h3>
+                    <img src="QR AC.jpg" alt="KHQR Code" class="mx-auto rounded-lg max-w-[200px]">
+                    <p class="text-secondary mt-4">Name: HOK SAN PANHA</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold font-koulen">Get In Touch</h2>
+            <p class="text-secondary mt-2 mb-8">Contact us for any questions or to purchase.</p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-6">
+                <a href="https://t.me/ChhaySemz" target="_blank" class="bg-blue-600 text-white py-3 px-8 rounded-lg text-lg font-semibold hover:bg-blue-700 transition w-full md:w-auto">
+                    <i class="fab fa-telegram-plane mr-2"></i> Contact Admin
+                </a>
+                <a href="https://t.me/TheDigitalMarketingNew" target="_blank" class="bg-gray-700 text-white py-3 px-8 rounded-lg text-lg font-semibold hover:bg-gray-600 transition w-full md:w-auto">
+                    <i class="fas fa-users mr-2"></i> Join Group
+                </a>
+            </div>
+
+            <!-- Buy Website Section -->
+            <div class="mt-16 border-t pt-10" style="border-color: var(--border-color);">
+                <h3 class="text-2xl font-bold text-yellow-accent font-koulen">Want a Website Like This?</h3>
+                <p class="text-secondary mt-2 mb-6 max-w-2xl mx-auto">Get a custom, modern, and professional website for your own business. Contact us for a quote!</p>
+                <a href="https://t.me/ChhaySemz" target="_blank" class="bg-yellow-500 text-black py-3 px-8 rounded-lg text-lg font-bold hover:bg-yellow-400 transition transform hover:scale-105 shadow-lg inline-block">
+                    <i class="fas fa-shopping-cart mr-2"></i> Buy This Website
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t" style="background-color: var(--header-bg); border-color: var(--border-color);">
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-secondary mb-4 md:mb-0">អរគុណបងៗសម្រាប់ការគាំទ្រ</p>
+                <div class="flex space-x-6">
+                    <a href="https://web.facebook.com/profile.php?id=61551780722669" target="_blank" class="text-secondary hover:text-blue-500 social-icon text-2xl"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.tiktok.com/@softwaretools_cambo?_t=ZS-90USPrnoQAK&_r=1" target="_blank" class="text-secondary hover:text-primary social-icon text-2xl"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://t.me/ChhaySemz" target="_blank" class="text-secondary hover:text-blue-400 social-icon text-2xl"><i class="fab fa-telegram"></i></a>
+                </div>
+            </div>
+            <div class="text-center text-gray-500 mt-8 border-t pt-6" style="border-color: var(--border-color);">
+                <p>&copy; 2024 Software Tools Cambo. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Smart Bot -->
+    <div id="chat-bubble">
+        <i class="fas fa-robot text-2xl text-white"></i>
+    </div>
+    <div id="chat-window">
+        <div class="chat-header">
+            <span>AI Assistant</span>
+            <button id="close-chat" class="text-2xl leading-none">&times;</button>
+        </div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div id="chat-options" class="chat-options flex flex-wrap justify-center"></div>
+    </div>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[1001] hidden flex items-center justify-center p-4">
+        <div id="cart-panel" class="w-full max-w-lg mx-4 rounded-lg shadow-lg flex flex-col h-full max-h-[600px]">
+            <div class="flex justify-between items-center p-4 border-b" style="border-color: var(--border-color);">
+                <h2 class="text-xl font-bold font-koulen">Your Shopping Cart</h2>
+                <button id="close-cart-modal" class="text-secondary hover:text-primary text-2xl leading-none">&times;</button>
+            </div>
+            <div id="cart-items" class="p-4 flex-grow overflow-y-auto">
+                <p class="text-secondary">Your cart is currently empty.</p>
+            </div>
+            <div id="cart-footer" class="p-4 border-t" style="border-color: var(--border-color);">
+                <div id="cart-summary" class="space-y-2"></div>
+                <a href="https://t.me/ChhaySemz" target="_blank" id="checkout-btn" class="mt-4 block w-full text-center bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition">
+                    Checkout on Telegram
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+                    // --- DEBOUNCE UTILITY ---
+                    function debounce(func, wait) {
+                        let timeout;
+                        return function executedFunction(...args) {
+                            const later = () => {
+                                clearTimeout(timeout);
+                                func(...args);
+                            };
+                            clearTimeout(timeout);
+                            timeout = setTimeout(later, wait);
+                        };
+                    }
+
+                    // --- Theme Switcher ---
+                    const themeToggle = document.getElementById('theme-toggle');
+                    const body = document.body;
+                    const themeIcon = themeToggle.querySelector('i');
+
+                    themeToggle.addEventListener('click', () => {
+                        body.classList.toggle('light-mode');
+                        const isLight = body.classList.contains('light-mode');
+                        themeIcon.classList.toggle('fa-sun', !isLight);
+                        themeIcon.classList.toggle('fa-moon', isLight);
+                    });
+
+                    // Mobile menu toggle
+                    const mobileMenuButton = document.getElementById('mobile-menu-button');
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+                    const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+                    for (let link of mobileMenuLinks) {
+                        link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+                    }
+
+                    // --- Shopping Cart Script ---
+                    const cartButton = document.getElementById('cart-button');
+                    const cartModal = document.getElementById('cart-modal');
+                    const closeCartModal = document.getElementById('close-cart-modal');
+                    const cartCount = document.getElementById('cart-count');
+                    const cartItemsContainer = document.getElementById('cart-items');
+                    const cartSummaryContainer = document.getElementById('cart-summary');
+                    const servicesSection = document.getElementById('services');
+                    let cart = [];
+                    let promoApplied = false;
+
+                    const openCart = () => cartModal.classList.remove('hidden');
+                    const closeCart = () => cartModal.classList.add('hidden');
+                    cartButton.addEventListener('click', openCart);
+                    closeCartModal.addEventListener('click', closeCart);
+                    cartModal.addEventListener('click', (e) => {
+                        if (e.target === cartModal) closeCart();
+                    });
+
+                    const addToCart = (product, price) => {
+                        if (cart.find(item => item.product === product)) {
+                            alert(`${product} is already in your cart.`);
+                            return;
+                        }
+                        cart.push({
+                            product,
+                            price: parseFloat(price)
+                        });
+                        updateCart();
+                    };
+                    const removeFromCart = (product) => {
+                        cart = cart.filter(item => item.product !== product);
+                        updateCart();
+                    };
+                    const updateCart = debounce(() => {
+                        renderCartItems();
+                        renderCartSummary();
+                        cartCount.textContent = cart.length;
+                    }, 100);
+
+                    const renderCartItems = () => {
+                        cartItemsContainer.innerHTML = '';
+                        if (cart.length === 0) {
+                            cartItemsContainer.innerHTML = '<p class="text-secondary">Your cart is currently empty.</p>';
+                            return;
+                        }
+                        cart.forEach(item => {
+                            const itemEl = document.createElement('div');
+                            itemEl.className = 'flex justify-between items-center py-2 border-b';
+                            itemEl.style.borderColor = 'var(--border-color)';
+                            itemEl.innerHTML = `
+                        <div><p class="font-semibold">${item.product}</p></div>
+                        <div class="flex items-center gap-4">
+                            <p class="font-semibold text-blue-400">$${item.price.toFixed(2)}</p>
+                            <button class="remove-from-cart-btn text-red-500 hover:text-red-400" data-product="${item.product}">&times;</button>
+                        </div>
+                    `;
+                            cartItemsContainer.appendChild(itemEl);
+                        });
+                    };
+                    const renderCartSummary = () => {
+                            const cartFooter = document.getElementById('cart-footer');
+                            if (cart.length === 0) {
+                                cartSummaryContainer.innerHTML = '';
+                                if (cartFooter) cartFooter.classList.add('hidden');
+                                return;
+                            }
+                            if (cartFooter) cartFooter.classList.remove('hidden');
+                            const subtotal = cart.reduce((acc, item) => acc + item.price, 0);
+                            const discount = promoApplied ? subtotal * 0.20 : 0;
+                            const total = subtotal - discount;
+                            cartSummaryContainer.innerHTML = `
+                    <div class="flex justify-between text-secondary"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
+                    ${promoApplied ? `<div class="flex justify-between text-green-400"><span>Discount (20%)</span><span>-$${discount.toFixed(2)}</span></div>` : ''}
+                    <div class="flex justify-between font-bold text-lg mt-2"><span>Total</span><span>$${total.toFixed(2)}</span></div>`;
+            };
+            
+            servicesSection.addEventListener('click', (e) => {
+                if (e.target.matches('.add-to-cart-btn')) {
+                    const { product, price } = e.target.dataset;
+                    addToCart(product, price);
+                }
+            });
+            cartItemsContainer.addEventListener('click', (e) => {
+                if (e.target.matches('.remove-from-cart-btn')) removeFromCart(e.target.dataset.product);
+            });
+
+            // --- AI Smart Bot Script ---
+            const chatBubble = document.getElementById('chat-bubble');
+            const chatWindow = document.getElementById('chat-window');
+            const closeChat = document.getElementById('close-chat');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatOptions = document.getElementById('chat-options');
+            let chatInitialized = false;
+            const conversation = {
+                start: { bot: "Hello! Welcome to Software Tools Cambo. How can I assist you today?", options: ["View Services", "Payment Info", "Contact Admin"] },
+                "View Services": { bot: "We offer premium accounts for many tools. You can see them all in our Services section.", options: ["Payment Info", "Contact Admin", "Start Over"] },
+                "Payment Info": { bot: "You can pay via ABA or Binance USDT. Check the 'Payment' section for QR codes. Once paid, please send a screenshot to the admin.", options: ["View Services", "Contact Admin", "Start Over"] },
+                "Contact Admin": { bot: "Sure! You can chat directly with our admin on Telegram for support or to confirm your payment.", action: () => window.open('https://t.me/ChhaySemz', '_blank'), options: ["View Services", "Payment Info", "Start Over"] },
+                "Start Over": { bot: "How else can I help you?", options: ["View Services", "Payment Info", "Contact Admin"] }
+            };
+            const addMessage = (text, sender) => {
+                const messageEl = document.createElement('div');
+                messageEl.classList.add('message', sender);
+                messageEl.textContent = text;
+                chatMessages.appendChild(messageEl);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            };
+            const showOptions = (options) => {
+                chatOptions.innerHTML = '';
+                options.forEach(optionText => {
+                    const button = document.createElement('button');
+                    button.textContent = optionText;
+                    button.classList.add('option-btn');
+                    button.addEventListener('click', () => handleOptionClick(optionText));
+                    chatOptions.appendChild(button);
+                });
+            };
+            const handleOptionClick = (optionText) => {
+                addMessage(optionText, 'user');
+                setTimeout(() => {
+                    const response = conversation[optionText];
+                    if (response.bot) addMessage(response.bot, 'bot');
+                    if (response.action) response.action();
+                    if (response.options) showOptions(response.options);
+                }, 500);
+            };
+            const initializeChat = () => {
+                if (!chatInitialized) {
+                    setTimeout(() => {
+                        addMessage(conversation.start.bot, 'bot');
+                        showOptions(conversation.start.options);
+                    }, 500);
+                    chatInitialized = true;
+                }
+            };
+            chatBubble.addEventListener('click', () => { chatWindow.classList.toggle('open'); initializeChat(); });
+            closeChat.addEventListener('click', () => chatWindow.classList.remove('open'));
+
+            // --- Promotion Code Script ---
+            const applyPromoBtn = document.getElementById('apply-promo');
+            const promoCodeInput = document.getElementById('promo-code');
+            const promoMessage = document.getElementById('promo-message');
+            applyPromoBtn.addEventListener('click', () => {
+                const enteredCode = promoCodeInput.value.trim().toUpperCase();
+                if (enteredCode === 'THESEM') {
+                    promoMessage.textContent = 'Code "THESEM" applied! 20% discount activated.';
+                    promoMessage.classList.remove('text-red-400');
+                    promoMessage.classList.add('text-green-400');
+                    promoApplied = true;
+                } else {
+                    promoMessage.textContent = 'Invalid promotion code.';
+                    promoMessage.classList.remove('text-green-400');
+                    promoMessage.classList.add('text-red-400');
+                    promoApplied = false;
+                }
+                updateCart();
+                setTimeout(() => { promoMessage.textContent = ''; }, 4000);
+            });
+
+            updateCart(); // Initial call
+        });
+    </script>
+
+</body>
+
+</html>
